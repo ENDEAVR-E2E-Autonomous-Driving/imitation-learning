@@ -1,0 +1,30 @@
+name: Python Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      - name: Run setup.py
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Run cartoon unit tests
+        working-directory: ./cartoon_simulation
+        run: |
+          pytest test/unit
+
+      - name: Run cartoon integration tests
+        working-directory: ./cartoon_simulation
+        run: |
+          pytest test/integration
